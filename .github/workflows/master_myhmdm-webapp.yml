@@ -24,14 +24,20 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
         
-      - name: Check locate path
-        run: pwd
+      - name: Check locate path1
+        run: ls /home/runner/work/myh-mdm/myh-mdm/
+        
+      - name: Check locate path2
+        run: ls /home/runner/work/myh-mdm/myh-mdm/common
+        
+      - name: Check locate path3
+        run: ls /home/runner/work/myh-mdm/myh-mdm/common/target
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: java-app
-          path: './commom/target/*.jar'
+          path: '/home/runner/work/myh-mdm/myh-mdm/common/target/common-0.1.0.jar'
 
   deploy:
     runs-on: ubuntu-latest
