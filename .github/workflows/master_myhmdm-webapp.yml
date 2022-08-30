@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: java-app
-          path: '/home/runner/work/myh-mdm/myh-mdm/common/target/common-0.1.0.jar'
+          path: '/home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war'
 
   deploy:
     runs-on: ubuntu-latest
@@ -59,4 +59,4 @@ jobs:
           app-name: 'myhmdm-webapp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_56EC7C29BDBC4762BFC3DC859E1D1ADD }}
-          package: '*.jar'
+          package: '*.war'
