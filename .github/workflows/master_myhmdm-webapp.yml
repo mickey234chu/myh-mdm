@@ -50,4 +50,4 @@ jobs:
           app-name: 'myhmdm-webapp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_56EC7C29BDBC4762BFC3DC859E1D1ADD }}
-          package: '*.war'
+          package: '*.jar'
