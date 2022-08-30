@@ -66,11 +66,3 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_56EC7C29BDBC4762BFC3DC859E1D1ADD }}
           package: '*.war'
           
-      - name: Deploy to Azure Web App2
-        id: deploy-to-webapp2
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'myhmdm-webapp'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_56EC7C29BDBC4762BFC3DC859E1D1ADD }}
-          package: '*.jar'
