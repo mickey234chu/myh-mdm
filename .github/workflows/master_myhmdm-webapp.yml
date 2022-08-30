@@ -36,8 +36,64 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: java-app
+          name: java-app1
+          path: '/home/runner/work/myh-mdm/myh-mdm/common/target/common-0.1.0.jar'
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app2
           path: '/home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war'
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app3
+          path: '/home/runner/work/myh-mdm/myh-mdm/jwt/target/jwt-0.1.0.jar'
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app4
+          path: '/home/runner/work/myh-mdm/myh-mdm/notification/target/notification-0.1.0.jar'
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app5
+          path: '/home/runner/work/myh-mdm/myh-mdm/plugins/audit/target/audit-0.1.0.jar'
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app6
+          path: '/home/runner/work/myh-mdm/myh-mdm/plugins/deviceinfo/target/deviceinfo-0.1.0.jar'
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app7
+          path: '/home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/core/target/devicelog-core-0.1.0.jar'
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app8
+          path: '/home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/postgres/target/devicelog-postgres-0.1.0.jar'
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app9
+          path: '/home/runner/work/myh-mdm/myh-mdm/plugins/messaging/target/messaging-0.1.0.jar'
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app10
+          path: '/home/runner/work/myh-mdm/myh-mdm/plugins/platform/target/platform-0.1.0.jar'
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app11
+          path: '/home/runner/work/myh-mdm/myh-mdm/plugins/push/target/push-0.1.0.war'
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-app12
+          path: '/home/runner/work/myh-mdm/myh-mdm/swagger/ui/target/mdm-swagger-ui-0.1.0.war'
+      
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,7 +106,8 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: java-app
+          name: java-app,java-app2,java-app3,java-app4,java-app5,java-app6,java-app7,java-app8,java-app9,java-app10,java-app11,java-app12
+          
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -60,3 +117,12 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_56EC7C29BDBC4762BFC3DC859E1D1ADD }}
           package: '*.war'
+          
+      - name: Deploy to Azure Web App2
+        id: deploy-to-webapp2
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'myhmdm-webapp'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_56EC7C29BDBC4762BFC3DC859E1D1ADD }}
+          package: '*.jar'
