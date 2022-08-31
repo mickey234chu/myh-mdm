@@ -28,7 +28,20 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: java-app
-          path: '${{ github.workspace }}'
+          path: |
+                '/home/runner/work/myh-mdm/myh-mdm/common/target/*.jar'
+                '/home/runner/work/myh-mdm/myh-mdm/jwt/target/*.jar'
+                '/home/runner/work/myh-mdm/myh-mdm/notification/target/*.jar'
+                '/home/runner/work/myh-mdm/myh-mdm/plugins/audit/target/*.jar'
+                '/home/runner/work/myh-mdm/myh-mdm/plugins/deviceinfo/target/*.jar'
+                '/home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/core/target/*.jar'
+                '/home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/postgres/target/*.jar'
+                '/home/runner/work/myh-mdm/myh-mdm/plugins/messaging/target/*.jar'
+                '/home/runner/work/myh-mdm/myh-mdm/plugins/platform/target/*.jar'
+                '/home/runner/work/myh-mdm/myh-mdm/plugins/push/target/*.jar'
+                '/home/runner/work/myh-mdm/myh-mdm/server/target/*.war'
+                '/home/runner/work/myh-mdm/myh-mdm/swagger/ui/target/*.war'
+                
 
   deploy:
     runs-on: ubuntu-latest
