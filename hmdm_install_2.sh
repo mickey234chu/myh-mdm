@@ -13,7 +13,7 @@ DEFAULT_SQL_USER=hmdm
 DEFAULT_SQL_PASS=
 DEFAULT_LOCATION="/opt/hmdm"
 DEFAULT_SCRIPT_LOCATION="/opt/hmdm"
-TOMCAT_HOME=$(ls -d /usr/local/tomcat | tail -n1)
+TOMCAT_HOME="/usr/local/tomcat"
 TOMCAT_SERVICE=$(echo $TOMCAT_HOME | awk '{n=split($1,A,"/"); print A[n]}')
 TOMCAT_ENGINE="Catalina"
 TOMCAT_HOST="localhost"
@@ -36,20 +36,6 @@ SMTP_FROM=
 
 
 # Use sandbox directory for tomcat 9
-#if [ "$TOMCAT_HOME" == "/usr/local/tomcat" ]; then
-#    DEFAULT_LOCATION="/usr/local/tomcat/work"
-#fi
-
-# Check if we are root
-CURRENTUSER=$(whoami)
-if [[ "$EUID" -ne 0 ]]; then
-    echo "It is recommended to run the installer script as root."
-    read -p "Proceed as $CURRENTUSER (Y/n)? " -n 1 -r
-    echo
-    if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
-fi
 echo "check install"
 # Check if there's an install folder
 if [ ! -d "./install" ]; then
