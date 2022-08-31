@@ -2,9 +2,9 @@
 <Context>
     <!-- database configurations -->
     <Parameter name="JDBC.driver"   value="org.postgresql.Driver"/>
-    <Parameter name="JDBC.url"      value="jdbc:postgresql://_SQL_HOST_:_SQL_PORT_/_SQL_BASE_"/>
-    <Parameter name="JDBC.username" value="_SQL_USER_"/>
-    <Parameter name="JDBC.password" value="_SQL_PASS_"/>
+    <Parameter name="JDBC.url"      value="jdbc:postgres://hmdm:topsecret@h-mdm-webapp-postsql.postgres.database.azure.com/postgres?sslmode=require"/>
+    <Parameter name="JDBC.username" value="hmdm"/>
+    <Parameter name="JDBC.password" value="topsecret"/>
 
     <!-- This directory is used to store uploaded app files, must be accessible for tomcat user -->
     <Parameter name="files.directory" value="_BASE_DIRECTORY_/files"/>

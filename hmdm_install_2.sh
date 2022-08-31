@@ -10,7 +10,7 @@ DEFAULT_SQL_HOST=localhost
 DEFAULT_SQL_PORT=5432
 DEFAULT_SQL_BASE=hmdm
 DEFAULT_SQL_USER=hmdm
-DEFAULT_SQL_PASS=
+DEFAULT_SQL_PASS=topsecret
 DEFAULT_LOCATION="/opt/hmdm"
 DEFAULT_SCRIPT_LOCATION="/opt/hmdm"
 TOMCAT_HOME="/usr/local/tomcat"
@@ -24,7 +24,7 @@ DEFAULT_PORT=""
 TEMP_DIRECTORY="/tmp"
 TEMP_SQL_FILE="$TEMP_DIRECTORY/hmdm_init.sql"
 TOMCAT_USER=$(ls -ld $TOMCAT_HOME/webapps | awk '{print $3}')
-
+LOCATION="/opt/hmdm"
 ADMIN_EMAIL=
 SMTP_HOST=
 SMTP_PORT=
@@ -58,7 +58,7 @@ fi
 
 echo "check apk"
 CLIENT_APK="hmdm-$CLIENT_VERSION-$CLIENT_VARIANT.apk"
-LANGUAGE = en
+LANGUAGE=en
 echo
 
 echo "PostgreSQL database setup"
@@ -208,14 +208,14 @@ if [ -d $TOMCAT_HOME/webapps/$TOMCAT_DEPLOY_PATH ]; then
     done
     echo
 fi
-
-TOMCAT_CONFIG_PATH=$TOMCAT_HOME/conf/$TOMCAT_ENGINE/$TOMCAT_HOST
+echo "start deploy work"
+TOMCAT_CONFIG_PATH=./
 if [ ! -d $TOMCAT_CONFIG_PATH ]; then
     mkdir -p $TOMCAT_CONFIG_PATH || exit 1
     chown root:$TOMCAT_USER $TOMCAT_CONFIG_PATH
     chmod 755 $TOMCAT_CONFIG_PATH
 fi
-cat ./install/context_template.xml | sed "s|_SQL_HOST_|$SQL_HOST|g; s|_SQL_PORT_|$SQL_PORT|g; s|_SQL_BASE_|$SQL_BASE|g; s|_SQL_USER_|$SQL_USER|g; s|_SQL_PASS_|$SQL_PASS|g; s|_BASE_DIRECTORY_|$LOCATION|g; s|_PROTOCOL_|$PROTOCOL|g; s|_BASE_HOST_|$BASE_HOST|g; s|_BASE_DOMAIN_|$BASE_DOMAIN|g; s|_BASE_PATH_|$BASE_PATH|g; s|_INSTALL_FLAG_|$INSTALL_FLAG_FILE|g; s|_SMTP_HOST_|$SMTP_HOST|g; s|_SMTP_PORT_|$SMTP_PORT|g;  s|_SMTP_SSL_|$SMTP_SSL|g; s|_SMTP_STARTTLS_|$SMTP_STARTTLS|g; s|_SMTP_USERNAME_|$SMTP_USERNAME|g; s|_SMTP_PASSWORD_|$SMTP_PASSWORD|g; s|_SMTP_FROM_|$SMTP_FROM|g;" > $TOMCAT_CONFIG_PATH/$TOMCAT_DEPLOY_PATH.xml
+cat ./install/context_template.xml | sed "s|_BASE_DIRECTORY_|$LOCATION|g; s|_PROTOCOL_|$PROTOCOL|g; s|_BASE_HOST_|$BASE_HOST|g; s|_BASE_DOMAIN_|$BASE_DOMAIN|g; s|_BASE_PATH_|$BASE_PATH|g; s|_INSTALL_FLAG_|$INSTALL_FLAG_FILE|g; s|_SMTP_HOST_|$SMTP_HOST|g; s|_SMTP_PORT_|$SMTP_PORT|g;  s|_SMTP_SSL_|$SMTP_SSL|g; s|_SMTP_STARTTLS_|$SMTP_STARTTLS|g; s|_SMTP_USERNAME_|$SMTP_USERNAME|g; s|_SMTP_PASSWORD_|$SMTP_PASSWORD|g; s|_SMTP_FROM_|$SMTP_FROM|g;" > $TOMCAT_CONFIG_PATH/$TOMCAT_DEPLOY_PATH.xml
 if [ "$?" -ne 0 ]; then
     echo "Failed to create a Tomcat config file $TOMCAT_CONFIG_PATH/$TOMCAT_DEPLOY_PATH.xml!"
     exit 1
@@ -223,9 +223,9 @@ fi
 echo "Tomcat config file created: $TOMCAT_CONFIG_PATH/$TOMCAT_DEPLOY_PATH.xml"
 chmod 644 $TOMCAT_CONFIG_PATH/$TOMCAT_DEPLOY_PATH.xml
 
-echo "Deploying $SERVER_WAR to Tomcat: $TOMCAT_HOME/webapps/$TOMCAT_DEPLOY_PATH.war"
-cp $SERVER_WAR $TOMCAT_HOME/webapps/$TOMCAT_DEPLOY_PATH.war
-chmod 644 $TOMCAT_HOME/webapps/$TOMCAT_DEPLOY_PATH.war
+echo "Deploying $SERVER_WAR to Tomcat: ./$TOMCAT_DEPLOY_PATH.war"
+cp $SERVER_WAR ./$TOMCAT_DEPLOY_PATH.war
+chmod 644 ./$TOMCAT_DEPLOY_PATH.war
 
 # Waiting until the end of deployment
 SUCCESSFUL_DEPLOY=0
