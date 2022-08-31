@@ -12,7 +12,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    container:
+      options: --user root
     steps:
       - uses: actions/checkout@v2
 
@@ -21,9 +22,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '8'
-          
-      - name: Install sudo package
-        run: apt update && apt install sudo
         
       - name: Build with Maven
         run: mvn clean install
