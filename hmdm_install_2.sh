@@ -12,7 +12,7 @@ DEFAULT_SQL_USER=hmdm
 DEFAULT_SQL_PASS=
 DEFAULT_LOCATION="/opt/hmdm"
 DEFAULT_SCRIPT_LOCATION="/opt/hmdm"
-TOMCAT_HOME=$(ls -d /usr/local/tomcat* | tail -n1)
+TOMCAT_HOME=$(ls -d /usr/local/tomcat | tail -n1)
 TOMCAT_SERVICE=$(echo $TOMCAT_HOME | awk '{n=split($1,A,"/"); print A[n]}')
 TOMCAT_ENGINE="Catalina"
 TOMCAT_HOST="localhost"
@@ -57,60 +57,6 @@ if [ ! -d "./install" ]; then
     exit 1
 fi
 
-# Check if there's aapt tool installed
-if ! which aapt > /dev/null; then
-    echo "Android App Packaging Tool is not installed!"
-    install_soft aapt
-fi
-
-# Check PostgreSQL installation
-if ! which psql > /dev/null; then
-    echo "PostgreSQL is not installed!"
-    install_soft postgresql
-    exit 1
-fi
-
-# Check if tomcat user exists
-getent passwd $TOMCAT_USER > /dev/null
-if [ "$?" -ne 0 ]; then
-    # Try tomcat8
-    TOMCAT_USER="tomcat8"
-    getent passwd $TOMCAT_USER >/dev/null
-    if [ "$?" -ne 0 ]; then
-        echo "Tomcat is not installed! User tomcat not found."
-        echo "If you're running Tomcat as different user,"
-        echo "please edit this script and update the TOMCAT_USER variable."
-        exit 1
-    fi
-fi
-
-# Check for Tomcat version in Ubuntu 20.04
-OUTDATED_TOMCAT=$(/usr/share/tomcat9/bin/version.sh 2>&1 | grep "Server number" | grep "9.0.31")
-if [ ! -z "$OUTDATED_TOMCAT" ]; then
-    echo "Tomcat $OUTDATED_TOMCAT requires updating!"
-    read -e -p "Update it now [Y/n]?: " -i "Y" REPLY
-    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-        # This clause is only for tomcat 9 so do not bother for the major version
-        VERSION=9.0.40
-        wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.40/bin/apache-tomcat-${VERSION}.tar.gz
-        tar -zxf apache-tomcat-${VERSION}.tar.gz
-        cd apache-tomcat-${VERSION}
-        chmod a+x bin
-        chmod a+x lib
-        chmod -R a+r bin
-        chmod -R a+r lib
-        chmod a+x bin/*.sh
-        mv /usr/share/tomcat9/bin /usr/share/tomcat9/bin~
-        mv /usr/share/tomcat9/lib /usr/share/tomcat9/lib~
-        cp -r bin /usr/share/tomcat9
-        cp -r lib /usr/share/tomcat9
-        service tomcat9 restart
-	cd ..
-	rm -rf apache-tomcat-${VERSION}
-	rm -f apache-tomcat-${VERSION}.tar.gz
-    fi
-fi
-
 # Search for the WAR
 SERVER_WAR=./server/target/launcher.war
 if [ ! -f $SERVER_WAR ]; then
@@ -122,27 +68,10 @@ if [ ! -f $SERVER_WAR ]; then
     exit 1
 fi
 
-# Check the Tomcat base folder
-if [ ! -d "$TOMCAT_HOME" ]; then
-    read -e -p "Enter the Tomcat base directory: " TOMCAT_HOME
-    if [ ! -d "$TOMCAT_HOME" ]; then
-        echo "The directory $TOMCAT_HOME does not exist."
-        echo "Headwind MDM installer requires this directory to install the WAR file!"
-        exit 1
-    fi
-fi
 
-#read -p "Are you installing an open-source version? (Y/n)? " -n 1 -r
-#echo
-#if [[ $REPLY =~ ^[Yy]$ ]]; then
-    CLIENT_VARIANT="os"
-#else
-#    CLIENT_VARIANT="master"
-#fi
 
 CLIENT_APK="hmdm-$CLIENT_VERSION-$CLIENT_VARIANT.apk"
-
-read -e -p "Please choose the installation language (en/ru) [en]: " -i "en" LANGUAGE
+LANGUAGE = en
 echo
 
 echo "PostgreSQL database setup"
@@ -159,13 +88,13 @@ echo "\q"
 echo "exit"
 echo "-------------------------"
 
-read -e -p "PostgreSQL host [$DEFAULT_SQL_HOST]: " -i "$DEFAULT_SQL_HOST" SQL_HOST
-read -e -p "PostgreSQL port [$DEFAULT_SQL_PORT]: " -i "$DEFAULT_SQL_PORT" SQL_PORT
-read -e -p "PostgreSQL database [$DEFAULT_SQL_BASE]: " -i "$DEFAULT_SQL_BASE" SQL_BASE
-read -e -p "PostgreSQL user [$DEFAULT_SQL_USER]: " -i "$DEFAULT_SQL_USER" SQL_USER
-read -e -p "PostgreSQL password: " -i "$DEFAULT_SQL_PASS" SQL_PASS
-
-PSQL_CONNSTRING="postgresql://$SQL_USER:$SQL_PASS@$SQL_HOST:$SQL_PORT/$SQL_BASE"
+#read -e -p "PostgreSQL host [$DEFAULT_SQL_HOST]: " -i "$DEFAULT_SQL_HOST" SQL_HOST
+#read -e -p "PostgreSQL port [$DEFAULT_SQL_PORT]: " -i "$DEFAULT_SQL_PORT" SQL_PORT
+#read -e -p "PostgreSQL database [$DEFAULT_SQL_BASE]: " -i "$DEFAULT_SQL_BASE" SQL_BASE
+#read -e -p "PostgreSQL user [$DEFAULT_SQL_USER]: " -i "$DEFAULT_SQL_USER" SQL_USER
+#read -e -p "PostgreSQL password: " -i "$DEFAULT_SQL_PASS" SQL_PASS
+#postgres://mickey234chu:{your_password}@h-mdm-webapp-postsql.postgres.database.azure.com/postgres?sslmode=require
+PSQL_CONNSTRING="postgres://hmdm:topsecret@h-mdm-webapp-postsql.postgres.database.azure.com/postgres?sslmode=require"
 
 # Check the PostgreSQL access
 echo "SELECT 1" | psql $PSQL_CONNSTRING > /dev/null 2>&1
@@ -198,7 +127,7 @@ echo "If the directory doesn't exist, it will be created"
 echo "##### FOR TOMCAT 9, USE SANDBOXED DIR: /usr/local/tomcat/work #####"
 echo
 
-read -e -p "Headwind MDM storage directory [$DEFAULT_LOCATION]: " -i "$DEFAULT_LOCATION" LOCATION
+#read -e -p "Headwind MDM storage directory [$DEFAULT_LOCATION]: " -i "$DEFAULT_LOCATION" LOCATION
 
 # Create directories
 if [ ! -d $LOCATION ]; then
@@ -239,57 +168,31 @@ echo "Headwind MDM requires access from Internet"
 echo "Please assign a public domain name to this server"
 echo
 
-read -e -p "Protocol (http|https) [$DEFAULT_PROTOCOL]: " -i "$DEFAULT_PROTOCOL" PROTOCOL
-while [ -z $BASE_DOMAIN ]; do
-    read -e -p "Domain name or public IP (e.g. example.com): " -i "$DEFAULT_BASE_DOMAIN" BASE_DOMAIN
-    if [ -z $BASE_DOMAIN ]; then
-        echo "Please enter a non-empty domain name"
-    fi
-done
-read -e -p "Port (e.g. 8080, leave empty for default ports 80 or 443): " -i "$DEFAULT_PORT" PORT
-read -e -p "Project path on server (e.g. /hmdm) or ROOT: " -i "$DEFAULT_BASE_PATH" BASE_PATH
+#read -e -p "Protocol (http|https) [$DEFAULT_PROTOCOL]: " -i "$DEFAULT_PROTOCOL" PROTOCOL
+#while [ -z $BASE_DOMAIN ]; do
+#    read -e -p "Domain name or public IP (e.g. example.com): " -i "$DEFAULT_BASE_DOMAIN" BASE_DOMAIN
+#    if [ -z $BASE_DOMAIN ]; then
+#        echo "Please enter a non-empty domain name"
+#    fi
+#done
+#read -e -p "Port (e.g. 8080, leave empty for default ports 80 or 443): " -i "$DEFAULT_PORT" PORT
+#read -e -p "Project path on server (e.g. /hmdm) or ROOT: " -i "$DEFAULT_BASE_PATH" BASE_PATH
+PROTOCOL = https
+BASE_DOMAIN = myhmdm-webapp.azurewebsites.net
+PORT = 8080
+BASE_PATH = ROOT
 
 # Nobody changes it!
 # read -e -p "Tomcat virtual host [$TOMCAT_HOST]: " -i "$TOMCAT_HOST" TOMCAT_HOST
 
-# HTTPS via LetsEncrypt
-echo
-echo "To enable password recovery function, Headwind MDM must be connected to SMTP."
-echo "Password recovery is an optional but recommended feature."
-read -e -p "Setup SMTP credentials [Y/n]?: " -i "Y" REPLY
 
-if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-    read -e -p "E-mail of the admin account: " ADMIN_EMAIL
-    read -e -p "SMTP host (e.g. smtp.gmail.com): " SMTP_HOST
-    read -e -p "SMTP port (e.g. 25, 465, or 587): " SMTP_PORT
-    read -e -p "Use SSL (1 - use, 0 - not use): " -i "0" SMTP_SSL
-    read -e -p "Use STARTTLS (1 - use, 0 - not use): " -i "0" SMTP_STARTTLS
-    read -e -p "SMTP username (leave empty if no auth required): " SMTP_USERNAME
-    read -e -p "SMTP password (leave empty if no auth required): " SMTP_PASSWORD
-    read -e -p "Sender e-mail address: " SMTP_FROM
-fi
-
-TOMCAT_DEPLOY_PATH=$BASE_PATH
-if [ "$BASE_PATH" == "ROOT" ]; then
-    BASE_PATH=""
-fi 
-
-if [[ ! -z "$PORT" ]]; then
-    BASE_HOST="$BASE_DOMAIN:$PORT"
-else
-    BASE_HOST="$BASE_DOMAIN"
-fi
 
 echo
 echo "Ready to install!"
 echo "Location on server: $LOCATION"
 echo "URL: $PROTOCOL://$BASE_HOST$BASE_PATH"
-read -p "Is this information correct [Y/n]? " -n 1 -r
+#read -p "Is this information correct [Y/n]? " -n 1 -r
 echo
-
-if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
-    exit 1
-fi
 
 # Prepare the XML config
 if [ ! -f ./install/context_template.xml ]; then
@@ -325,7 +228,6 @@ echo "Tomcat config file created: $TOMCAT_CONFIG_PATH/$TOMCAT_DEPLOY_PATH.xml"
 chmod 644 $TOMCAT_CONFIG_PATH/$TOMCAT_DEPLOY_PATH.xml
 
 echo "Deploying $SERVER_WAR to Tomcat: $TOMCAT_HOME/webapps/$TOMCAT_DEPLOY_PATH.war"
-rm -f $INSTALL_FLAG_FILE > /dev/null 2>&1
 cp $SERVER_WAR $TOMCAT_HOME/webapps/$TOMCAT_DEPLOY_PATH.war
 chmod 644 $TOMCAT_HOME/webapps/$TOMCAT_DEPLOY_PATH.war
 
@@ -344,13 +246,7 @@ for i in {1..120}; do
     sleep 1
 done
 echo
-rm -f $INSTALL_FLAG_FILE > /dev/null 2>&1
-if [ $SUCCESSFUL_DEPLOY -ne 1 ]; then
-    echo "ERROR: failed to deploy WAR file!"
-    echo "Please check $TOMCAT_HOME/logs/catalina.out for details."
-    exit 1
-fi
-echo "Deployment successful, initializing the database..."
+echo "Initializing the database..."
 
 # Initialize database
 cat ./install/sql/hmdm_init.$LANGUAGE.sql | sed "s|_HMDM_BASE_|$LOCATION|g; s|_HMDM_VERSION_|$CLIENT_VERSION|g; s|_HMDM_APK_|$CLIENT_APK|g; s|_ADMIN_EMAIL_|$ADMIN_EMAIL|g;" > $TEMP_SQL_FILE
@@ -372,77 +268,10 @@ echo "======================================"
 echo
 
 # HTTPS via LetsEncrypt
-read -e -p "Setup HTTPS via LetsEncrypt [Y/n]?: " -i "Y" REPLY
 
-if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-    if ! which certbot > /dev/null; then
-        apt update
-        apt install -y certbot
-    fi
-    sed "s/DOMAIN=your-domain.com/DOMAIN=$BASE_DOMAIN/" ./letsencrypt-ssl.sh > $SCRIPT_LOCATION/letsencrypt-ssl.sh
-    chmod +x $SCRIPT_LOCATION/letsencrypt-ssl.sh
-    $SCRIPT_LOCATION/letsencrypt-ssl.sh
-
-    echo
-    echo "======================================"
-    echo "The installer can try to update Tomcat config automatically."
-    echo "Use this feature with care, ONLY IF YOU DIDN'T TOUCH server.xml"
-    echo "If Tomcat won't work after update, please revert the config back:"
-    echo "cp $TOMCAT_HOME/conf/server.xml~ $TOMCAT_HOME/conf/server.xml"
-    echo "======================================"
-    echo
-    read -e -p "Update Tomcat config automatically [Y/n]?: " -i "Y" REPLY
-    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-        cp $TOMCAT_HOME/conf/server.xml $TOMCAT_HOME/conf/server.xml~
-	# EPIC MAGIC!!!
-        sed -z -e "s^<\!\-\-\n    <Connector port=\"8443\" protocol=\"org.apache.coyote.http11.Http11NioProtocol\"^<Connector port=\"8443\" protocol=\"org.apache.coyote.http11.Http11NioProtocol\"^" -e "s^\-\->\n    <\!\-\- Define an SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2^<\!\-\- Define an SSL/TLS HTTP/1.1 Connector on port 8443 with HTTP/2^" -e "s^certificateKeystoreFile=\"conf/localhost-rsa.jks\"^certificateKeystoreFile=\"/var/lib/tomcat9/ssl/$BASE_DOMAIN.jks\" certificateKeystorePassword=\"123456\"^" $TOMCAT_HOME/conf/server.xml~ > $TOMCAT_HOME/conf/server.xml
-	service $TOMCAT_SERVICE restart
-    fi
-
-    echo
-    echo "======================================"
-    echo "Secure installation of Headwind MDM has been done!"
-    echo "At this step, you can open in your web browser:"
-    echo "https://$BASE_DOMAIN:8443$BASE_PATH"
-    echo
-    echo "Notice: if Tomcat starts slowly:"
-    echo "Open a file /etc/java-11-openjdk/security/java.security"
-    echo "Replace securerandom.source=file:/dev/random"
-    echo "to securerandom.source=file:/dev/urandom"
-    echo "and restart Tomcat."
-    echo "======================================"
-    echo
-
-    CERTBOT_RENEWAL=$(crontab -l | grep letsencrypt-ssl.sh)
-    if [ -z "$CERTBOT_RENEWAL" ]; then 
-        read -e -p "Setup regular HTTPS certificate renewal [Y/n]?: " -i "Y" REPLY
-        if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-            crontab -l > /tmp/current-crontab
-            echo "0 5 * * 1 $SCRIPT_LOCATION/letsencrypt-ssl.sh" >> /tmp/current-crontab
-	    crontab /tmp/current-crontab
-	    rm /tmp/current-crontab
-        fi
-    fi
-fi
 
 # Redirect the ports
-IPTABLES_HTTPS_SET=$(/sbin/iptables -t nat --list | grep 8443)
-if [ -z "$IPTABLES_HTTPS_SET" ]; then
-    read -e -p "Use iptables to redirect port 443 to 8443 [Y/n]?: " -i "Y" REPLY
-    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-        cp iptables-tomcat.sh $SCRIPT_LOCATION/iptables-tomcat.sh
-	chmod +x $SCRIPT_LOCATION/iptables-tomcat.sh
-	$SCRIPT_LOCATION/iptables-tomcat.sh
 
-        IPTABLES_RENEWAL=$(crontab -l | grep iptables-tomcat.sh)
-	if [ -z "$IPTABLES_RENEWAL" ]; then
-            crontab -l > /tmp/current-crontab
-	    echo "@reboot $SCRIPT_LOCATION/iptables-tomcat.sh" >> /tmp/current-crontab
-            crontab /tmp/current-crontab
-	    rm /tmp/current-crontab
-	fi
-    fi
-fi
 
 # Download required files
 read -e -p "Move required APKs from h-mdm.com to your server [Y/n]?: " -i "Y" REPLY
