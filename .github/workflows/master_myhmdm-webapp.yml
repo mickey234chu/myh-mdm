@@ -47,6 +47,8 @@ jobs:
                 /home/runner/work/myh-mdm/myh-mdm/plugins/push/target/push-0.1.0.jar
                 /home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war
                 /home/runner/work/myh-mdm/myh-mdm/swagger/ui/target/mdm-swagger-ui-0.1.0.war
+                /home/runner/work/myh-mdm/myh-mdm/ROOT.war
+                /home/runner/work/myh-mdm/myh-mdm/ROOT.xml
                 
 
   deploy:
@@ -69,4 +71,6 @@ jobs:
           app-name: 'myhmdm-webapp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4543C35A907D4B26B26A97E23FC0AE42 }}
-          package: '/home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war'
+          package: |
+                    '/home/runner/work/myh-mdm/myh-mdm/ROOT.war'
+                    '/home/runner/work/myh-mdm/myh-mdm/ROOT.xml'
