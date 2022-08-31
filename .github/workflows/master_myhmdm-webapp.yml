@@ -10,23 +10,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  tex:
-    name: Installing TeX Live and ((Xe)La)TeX related packages
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install sudo package
-        run: apt update && apt install sudo
   build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
 
+
       - name: Set up Java version
         uses: actions/setup-java@v1
         with:
           java-version: '8'
-
+          
+      - name: Install sudo package
+        run: apt update && apt install sudo
+        
       - name: Build with Maven
         run: mvn clean install
 
