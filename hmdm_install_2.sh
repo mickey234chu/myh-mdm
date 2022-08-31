@@ -3,6 +3,7 @@
 # Headwind MDM installer script
 # Tested on Ubuntu Linux 18.04 - 20.10, Ubuntu 20.04 is recommended
 #
+echo "start"
 REPOSITORY_BASE=https://h-mdm.com/files
 CLIENT_VERSION=5.07
 DEFAULT_SQL_HOST=localhost
