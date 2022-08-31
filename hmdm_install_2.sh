@@ -114,25 +114,25 @@ echo "If the directory doesn't exist, it will be created"
 echo "##### FOR TOMCAT 9, USE SANDBOXED DIR: /usr/local/tomcat/work #####"
 echo
 
-#read -e -p "Headwind MDM storage directory [$DEFAULT_LOCATION]: " -i "$DEFAULT_LOCATION" LOCATION
+#read -e -p "Headwind MDM storage directory [$DEFAULT_LOCATION]: " -i "$DEFAULT_LOCATION" LOCATION#
 
 # Create directories
-if [ ! -d $LOCATION ]; then
-    mkdir -p $LOCATION || exit 1
-    chown $TOMCAT_USER:$TOMCAT_USER $LOCATION || exit 1
-fi
-if [ ! -d $LOCATION/files ]; then
-    mkdir $LOCATION/files
-    chown $TOMCAT_USER:$TOMCAT_USER $LOCATION/files || exit 1
-fi
-if [ ! -d $LOCATION/plugins ]; then
-    mkdir $LOCATION/plugins
-    chown $TOMCAT_USER:$TOMCAT_USER $LOCATION/plugins || exit 1
-fi
-if [ ! -d $LOCATION/logs ]; then
-    mkdir $LOCATION/logs
-    chown $TOMCAT_USER:$TOMCAT_USER $LOCATION/logs || exit 1
-fi
+#if [ ! -d $LOCATION ]; then
+#    mkdir -p $LOCATION || exit 1
+#    chown $TOMCAT_USER:$TOMCAT_USER $LOCATION || exit 1
+#fi
+#if [ ! -d $LOCATION/files ]; then
+#    mkdir $LOCATION/files
+#    chown $TOMCAT_USER:$TOMCAT_USER $LOCATION/files || exit 1
+#fi
+#if [ ! -d $LOCATION/plugins ]; then
+#    mkdir $LOCATION/plugins
+#    chown $TOMCAT_USER:$TOMCAT_USER $LOCATION/plugins || exit 1
+#fi
+#if [ ! -d $LOCATION/logs ]; then
+#    mkdir $LOCATION/logs
+#    chown $TOMCAT_USER:$TOMCAT_USER $LOCATION/logs || exit 1
+#fi
 
 INSTALL_FLAG_FILE="$LOCATION/hmdm_install_flag"
 
@@ -143,11 +143,11 @@ chown $TOMCAT_USER:$TOMCAT_USER $LOCATION/log4j-hmdm.xml
 echo
 echo "Please choose the directory where supply scripts will be located."
 echo
-read -e -p "Headwind MDM scripts directory [$DEFAULT_SCRIPT_LOCATION]: " -i "$DEFAULT_SCRIPT_LOCATION" SCRIPT_LOCATION
-if [ ! -d $SCRIPT_LOCATION ]; then
-    mkdir -p $SCRIPT_LOCATION || exit 1
-fi
-
+#read -e -p "Headwind MDM scripts directory [$DEFAULT_SCRIPT_LOCATION]: " -i "$DEFAULT_SCRIPT_LOCATION" SCRIPT_LOCATION
+#if [ ! -d $SCRIPT_LOCATION ]; then
+#    mkdir -p $SCRIPT_$LOCATION || exit 1
+#fi
+SCRIPT_LOCATION=$DEFAULT_SCRIPT_LOCATION
 echo
 echo "Web application setup"
 echo "====================="
@@ -164,11 +164,20 @@ echo
 #done
 #read -e -p "Port (e.g. 8080, leave empty for default ports 80 or 443): " -i "$DEFAULT_PORT" PORT
 #read -e -p "Project path on server (e.g. /hmdm) or ROOT: " -i "$DEFAULT_BASE_PATH" BASE_PATH
-PROTOCOL = https
-BASE_DOMAIN = myhmdm-webapp.azurewebsites.net
-PORT = 8080
-BASE_PATH = ROOT
+PROTOCOL=https
+BASE_DOMAIN=myhmdm-webapp.azurewebsites.net
+PORT=8080
+BASE_PATH=ROOT
+TOMCAT_DEPLOY_PATH=$BASE_PATH
+if [ "$BASE_PATH" == "ROOT" ]; then
+    BASE_PATH=""
+fi 
 
+if [[ ! -z "$PORT" ]]; then
+    BASE_HOST="$BASE_DOMAIN:$PORT"
+else
+    BASE_HOST="$BASE_DOMAIN"
+fi
 # Nobody changes it!
 # read -e -p "Tomcat virtual host [$TOMCAT_HOST]: " -i "$TOMCAT_HOST" TOMCAT_HOST
 
@@ -261,19 +270,7 @@ echo
 
 
 # Download required files
-read -e -p "Move required APKs from h-mdm.com to your server [Y/n]?: " -i "Y" REPLY
-if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-    FILES=$(echo "SELECT url FROM applicationversions WHERE url IS NOT NULL" | psql $PSQL_CONNSTRING 2>/dev/null | tail -n +3 | head -n -2)
-    CURRENT_DIR=$(pwd)
-    cd $LOCATION/files
-    for FILE in $FILES; do
-        echo "Downloading $FILE..."
-	wget $FILE
-    done
-    chown $TOMCAT_USER:$TOMCAT_USER *
-    echo "UPDATE applicationversions SET url=REPLACE(url, 'https://h-mdm.com', '$PROTOCOL://$BASE_HOST$BASE_PATH') WHERE url IS NOT NULL" | psql $PSQL_CONNSTRING >/dev/null 2>&1
-    cd $CURRENT_DIR
-fi
+
 
 echo
 echo "======================================"
