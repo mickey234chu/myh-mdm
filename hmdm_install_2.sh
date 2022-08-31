@@ -36,9 +36,9 @@ SMTP_FROM=
 
 
 # Use sandbox directory for tomcat 9
-if [ "$TOMCAT_HOME" == "/usr/local/tomcat" ]; then
-    DEFAULT_LOCATION="/usr/local/tomcat/work"
-fi
+#if [ "$TOMCAT_HOME" == "/usr/local/tomcat" ]; then
+#    DEFAULT_LOCATION="/usr/local/tomcat/work"
+#fi
 
 # Check if we are root
 CURRENTUSER=$(whoami)
