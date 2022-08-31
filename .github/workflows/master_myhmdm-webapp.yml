@@ -10,6 +10,12 @@ on:
   workflow_dispatch:
 
 jobs:
+  tex:
+    name: Installing TeX Live and ((Xe)La)TeX related packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install sudo package
+        run: apt update && apt install sudo
   build:
     runs-on: ubuntu-latest
 
