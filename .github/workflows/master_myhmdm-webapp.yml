@@ -29,18 +29,18 @@ jobs:
         with:
           name: java-app
           path: |
-                '/home/runner/work/myh-mdm/myh-mdm/common/target/commom-0.1.0.jar'
-                '/home/runner/work/myh-mdm/myh-mdm/jwt/target/jwt-0.1.0.jar'
-                '/home/runner/work/myh-mdm/myh-mdm/notification/target/notification-0.1.0.jar'
-                '/home/runner/work/myh-mdm/myh-mdm/plugins/audit/target/audit-0.1.0.jar'
-                '/home/runner/work/myh-mdm/myh-mdm/plugins/deviceinfo/target/deviceinfo-0.1.0.jpush-0.1.0ar'
-                '/home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/core/target/devicelog-core-0.1.0.jar'
-                '/home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/postgres/target/devicelog-postgres-0.1.0.jar'
-                '/home/runner/work/myh-mdm/myh-mdm/plugins/messaging/target/messaging-0.1.0.jar'
-                '/home/runner/work/myh-mdm/myh-mdm/plugins/platform/target/platform-0.1.0.jar'
-                '/home/runner/work/myh-mdm/myh-mdm/plugins/push/target/push-0.1.0.jar'
-                '/home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war'
-                '/home/runner/work/myh-mdm/myh-mdm/swagger/ui/target/mdm-swagger-ui-0.1.0.war'
+                /home/runner/work/myh-mdm/myh-mdm/common/target/commom-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/jwt/target/jwt-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/notification/target/notification-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/audit/target/audit-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/deviceinfo/target/deviceinfo-0.1.0.jpush-0.1.0ar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/core/target/devicelog-core-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/postgres/target/devicelog-postgres-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/messaging/target/messaging-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/platform/target/platform-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/push/target/push-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war
+                /home/runner/work/myh-mdm/myh-mdm/swagger/ui/target/mdm-swagger-ui-0.1.0.war
                 
 
   deploy:
