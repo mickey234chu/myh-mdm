@@ -28,7 +28,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: java-app
-          path: '/home/runner/work/myh-mdm/myh-mdm/**/target/*.?(war|jar)'
+          path: '${{ github.workspace }}'
 
   deploy:
     runs-on: ubuntu-latest
