@@ -23,7 +23,10 @@ jobs:
         
       - name: Build with Maven
         run: mvn clean install
-
+        
+      - name: try upgraph sh
+        run: chmod +x reset.sh
+        
       - name: try create war with database
         run: ./hmdm_install_2.sh
         
