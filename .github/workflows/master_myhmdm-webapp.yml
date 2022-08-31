@@ -63,4 +63,4 @@ jobs:
           app-name: 'myhmdm-webapp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4543C35A907D4B26B26A97E23FC0AE42 }}
-          package: '*.?(war|jar)'
+          package: 'launcher.war'
