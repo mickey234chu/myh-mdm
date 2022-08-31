@@ -50,14 +50,14 @@ if [[ "$EUID" -ne 0 ]]; then
         exit 1
     fi
 fi
-
+echo "check install"
 # Check if there's an install folder
 if [ ! -d "./install" ]; then
     echo "Cannot find installation directory (install)"
     echo "Please cd to the installation directory before running script!"
     exit 1
 fi
-
+echo "check war"
 # Search for the WAR
 SERVER_WAR=./server/target/launcher.war
 if [ ! -f $SERVER_WAR ]; then
@@ -70,7 +70,7 @@ if [ ! -f $SERVER_WAR ]; then
 fi
 
 
-
+echo "check apk"
 CLIENT_APK="hmdm-$CLIENT_VERSION-$CLIENT_VARIANT.apk"
 LANGUAGE = en
 echo
@@ -96,7 +96,7 @@ echo "-------------------------"
 #read -e -p "PostgreSQL password: " -i "$DEFAULT_SQL_PASS" SQL_PASS
 #postgres://mickey234chu:{your_password}@h-mdm-webapp-postsql.postgres.database.azure.com/postgres?sslmode=require
 PSQL_CONNSTRING="postgres://hmdm:topsecret@h-mdm-webapp-postsql.postgres.database.azure.com/postgres?sslmode=require"
-
+echo "Check the PostgreSQL access"
 # Check the PostgreSQL access
 echo "SELECT 1" | psql $PSQL_CONNSTRING > /dev/null 2>&1
 if [ "$?" -ne 0 ]; then
@@ -104,7 +104,7 @@ if [ "$?" -ne 0 ]; then
     echo "Please make sure you've created the database!"
     exit 1
 fi
-
+echo "TABLE_EXISTS"
 TABLE_EXISTS=$(echo "\dt users" | psql $PSQL_CONNSTRING 2>&1 | grep public)
 if [ ! -z "$TABLE_EXISTS" ]; then
     echo "The database is already setup."
