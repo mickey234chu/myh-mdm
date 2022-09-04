@@ -12,44 +12,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
-
 
       - name: Set up Java version
         uses: actions/setup-java@v1
         with:
-          java-version: '8'
-        
+          java-version: '11'
+
       - name: Build with Maven
         run: mvn clean install
-        
-      - name: try upgraph sh
-        run: chmod +x hmdm_install_2.sh
-        
-      - name: try create war with database
-        run: ./hmdm_install_2.sh
-        
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: java-app
-          path: |
-                /home/runner/work/myh-mdm/myh-mdm/common/target/commom-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/jwt/target/jwt-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/notification/target/notification-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/audit/target/audit-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/deviceinfo/target/deviceinfo-0.1.0.jpush-0.1.0ar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/core/target/devicelog-core-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/postgres/target/devicelog-postgres-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/messaging/target/messaging-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/platform/target/platform-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/push/target/push-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war
-                /home/runner/work/myh-mdm/myh-mdm/swagger/ui/target/mdm-swagger-ui-0.1.0.war
-                /home/runner/work/myh-mdm/myh-mdm/ROOT.war
-                /home/runner/work/myh-mdm/myh-mdm/ROOT.xml
-                
+          path: '${{ github.workspace }}/target/*.war'
 
   deploy:
     runs-on: ubuntu-latest
@@ -70,5 +49,5 @@ jobs:
         with:
           app-name: 'myhmdm-webapp'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4543C35A907D4B26B26A97E23FC0AE42 }}
-          package: /home/runner/work/myh-mdm/myh-mdm/ROOT.war
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BC593CE2BA6A4E85B59E0DE2A38D6838 }}
+          package: '*.war'
