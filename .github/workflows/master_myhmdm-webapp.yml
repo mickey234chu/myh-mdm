@@ -33,27 +33,26 @@ jobs:
         run: mkdir staging 
       - name: locat
         run: pwd
-      - name: Cp jarandwar2
-        run: |
-          sudo cp ./common/target/commom-0.1.0.jar staging
-          sudo cp ./jwt/target/jwt-0.1.0.jar staging
-          sudo cp ./notification/target/notification-0.1.0.jar staging
-          sudo cp ./plugins/audit/target/audit-0.1.0.jar staging
-          sudo cp ./plugins/deviceinfo/target/deviceinfo-0.1.0.jpush-0.1.0ar staging
-          sudo cp ./plugins/devicelog/core/target/devicelog-core-0.1.0.jar staging
-          sudo cp ./plugins/devicelog/postgres/target/devicelog-postgres-0.1.0.jar staging
-          sudo cp ./plugins/messaging/target/messaging-0.1.0.jar staging
-          sudo cp .m/plugins/platform/target/platform-0.1.0.jar staging
-          sudo cp ./plugins/push/target/push-0.1.0.jar staging
-          sudo cp ./server/target/launcher.war staging
-          sudo cp ./swagger/ui/target/mdm-swagger-ui-0.1.0.war staging
+  
 
         
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: Package
-          path: staging
+          name: java-app
+          path: |
+                /home/runner/work/myh-mdm/myh-mdm/common/target/commom-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/jwt/target/jwt-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/notification/target/notification-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/audit/target/audit-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/deviceinfo/target/deviceinfo-0.1.0.jpush-0.1.0ar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/core/target/devicelog-core-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/postgres/target/devicelog-postgres-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/messaging/target/messaging-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/platform/target/platform-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/plugins/push/target/push-0.1.0.jar
+                /home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war
+                /home/runner/work/myh-mdm/myh-mdm/swagger/ui/target/mdm-swagger-ui-0.1.0.war
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -74,4 +73,4 @@ jobs:
           app-name: 'myhmdm-webapp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BC593CE2BA6A4E85B59E0DE2A38D6838 }}
-          package: staging
+          package: launcher.war
