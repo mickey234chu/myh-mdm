@@ -64,7 +64,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: Package
+          name: java-app
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -73,4 +73,6 @@ jobs:
           app-name: 'myhmdm-webapp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BC593CE2BA6A4E85B59E0DE2A38D6838 }}
-          package: launcher.war
+          package: |
+                  launcher.war
+                  mdm-swagger-ui-0.1.0.war
