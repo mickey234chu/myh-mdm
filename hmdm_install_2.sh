@@ -91,7 +91,32 @@ if [ "$?" -ne 0 ]; then
     fi
 fi
 
-
+# Check for Tomcat version in Ubuntu 20.04
+OUTDATED_TOMCAT=$(/usr/share/tomcat9/bin/version.sh 2>&1 | grep "Server number" | grep "9.0.31")
+if [ ! -z "$OUTDATED_TOMCAT" ]; then
+    echo "Tomcat $OUTDATED_TOMCAT requires updating!"
+    REPLY=Y
+    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
+        # This clause is only for tomcat 9 so do not bother for the major version
+        VERSION=9.0.40
+        wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.40/bin/apache-tomcat-${VERSION}.tar.gz
+        tar -zxf apache-tomcat-${VERSION}.tar.gz
+        cd apache-tomcat-${VERSION}
+        chmod a+x bin
+        chmod a+x lib
+        chmod -R a+r bin
+        chmod -R a+r lib
+        chmod a+x bin/*.sh
+        mv /usr/share/tomcat9/bin /usr/share/tomcat9/bin~
+        mv /usr/share/tomcat9/lib /usr/share/tomcat9/lib~
+        cp -r bin /usr/share/tomcat9
+        cp -r lib /usr/share/tomcat9
+        service tomcat9 restart
+	cd ..
+	rm -rf apache-tomcat-${VERSION}
+	rm -f apache-tomcat-${VERSION}.tar.gz
+    fi
+fi
 # Search for the WAR
 SERVER_WAR=./server/target/launcher.war
 if [ ! -f $SERVER_WAR ]; then
