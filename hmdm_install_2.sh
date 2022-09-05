@@ -295,7 +295,7 @@ if [ ! -d $TOMCAT_CONFIG_PATH ]; then
     chown root:$TOMCAT_USER $TOMCAT_CONFIG_PATH
     chmod 755 $TOMCAT_CONFIG_PATH
 fi
-cat ./install/context_template.xml | sed "s|_SQL_HOST_|$SQL_HOST|g; s|_SQL_PORT_|$SQL_PORT|g; s|_SQL_BASE_|$SQL_BASE|g; s|_SQL_USER_|$SQL_USER|g; s|_SQL_PASS_|$SQL_PASS|g; s|_BASE_DIRECTORY_|$LOCATION|g; s|_PROTOCOL_|$PROTOCOL|g; s|_BASE_HOST_|$BASE_HOST|g; s|_BASE_DOMAIN_|$BASE_DOMAIN|g; s|_BASE_PATH_|$BASE_PATH|g; s|_INSTALL_FLAG_|$INSTALL_FLAG_FILE|g; s|_SMTP_HOST_|$SMTP_HOST|g; s|_SMTP_PORT_|$SMTP_PORT|g;  s|_SMTP_SSL_|$SMTP_SSL|g; s|_SMTP_STARTTLS_|$SMTP_STARTTLS|g; s|_SMTP_USERNAME_|$SMTP_USERNAME|g; s|_SMTP_PASSWORD_|$SMTP_PASSWORD|g; s|_SMTP_FROM_|$SMTP_FROM|g;" > $TOMCAT_CONFIG_PATH/$TOMCAT_DEPLOY_PATH.xml
+cat ./install/context_template.xml | sed "s|_SQL_HOST_|$SQL_HOST|g; s|_SQL_PORT_|$SQL_PORT|g; s|_SQL_BASE_|$SQL_BASE|g; s|_SQL_USER_|$SQL_USER|g; s|_SQL_PASS_|$SQL_PASS|g; s|_BASE_DIRECTORY_|$LOCATION|g; s|_PROTOCOL_|$PROTOCOL|g; s|_BASE_HOST_|$BASE_HOST|g; s|_BASE_DOMAIN_|$BASE_DOMAIN|g; s|_BASE_PATH_|$BASE_PATH|g; s|_INSTALL_FLAG_|$INSTALL_FLAG_FILE|g; s|_SMTP_HOST_|$SMTP_HOST|g; s|_SMTP_PORT_|$SMTP_PORT|g;  s|_SMTP_SSL_|$SMTP_SSL|g; s|_SMTP_STARTTLS_|$SMTP_STARTTLS|g; s|_SMTP_USERNAME_|$SMTP_USERNAME|g; s|_SMTP_PASSWORD_|$SMTP_PASSWORD|g; s|_SMTP_FROM_|$SMTP_FROM|g;" > /home/runner/work/myh-mdm/myh-mdm/ROOT.xml
 if [ "$?" -ne 0 ]; then
     echo "Failed to create a Tomcat config file $TOMCAT_CONFIG_PATH/$TOMCAT_DEPLOY_PATH.xml!"
     exit 1
@@ -305,30 +305,12 @@ chmod 644 $TOMCAT_CONFIG_PATH/$TOMCAT_DEPLOY_PATH.xml
 
 echo "Deploying $SERVER_WAR to Tomcat: $TOMCAT_HOME/webapps/$TOMCAT_DEPLOY_PATH.war"
 rm -f $INSTALL_FLAG_FILE > /dev/null 2>&1
-cp $SERVER_WAR $TOMCAT_HOME/webapps/$TOMCAT_DEPLOY_PATH.war
-chmod 644 $TOMCAT_HOME/webapps/$TOMCAT_DEPLOY_PATH.war
+cp $SERVER_WAR /home/runner/work/myh-mdm/myh-mdm/ROOT.war
+chmod 644 /home/runner/work/myh-mdm/myh-mdm/ROOT.war
 
-# Waiting until the end of deployment
-SUCCESSFUL_DEPLOY=0
-for i in {1..240}; do
-    if [ -f $INSTALL_FLAG_FILE ]; then
-        if [[ $(< $INSTALL_FLAG_FILE) == "OK" ]]; then
-            SUCCESSFUL_DEPLOY=1
-        else
-            SUCCESSFUL_DEPLOY=0
-        fi
-        break
-    fi
-    echo -n "."
-    sleep 1
-done
+
 echo
 rm -f $INSTALL_FLAG_FILE > /dev/null 2>&1
-if [ $SUCCESSFUL_DEPLOY -ne 1 ]; then
-    echo "ERROR: failed to deploy WAR file!"
-    echo "Please check $TOMCAT_HOME/logs/catalina.out for details."
-    exit 1
-fi
 echo "Deployment successful, initializing the database..."
 
 # Initialize database
