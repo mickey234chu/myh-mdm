@@ -28,32 +28,15 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt install -y aapt tomcat9 postgresql vim certbot unzip net-tools
-          
-      - name: try upgraph sh
-        run: chmod +x hmdm_install_2.sh
         
-      - name: try create war with database
-        run: sudo ./hmdm_install_2.sh
+      - name: Cp jarandwar
+        run: mkdir staging && cp target/*.jar staging
         
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: java-app
-          path: |
-                /home/runner/work/myh-mdm/myh-mdm/common/target/commom-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/jwt/target/jwt-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/notification/target/notification-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/audit/target/audit-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/deviceinfo/target/deviceinfo-0.1.0.jpush-0.1.0ar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/core/target/devicelog-core-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/postgres/target/devicelog-postgres-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/messaging/target/messaging-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/platform/target/platform-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/plugins/push/target/push-0.1.0.jar
-                /home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war
-                /home/runner/work/myh-mdm/myh-mdm/swagger/ui/target/mdm-swagger-ui-0.1.0.war
-                /home/runner/work/myh-mdm/myh-mdm/ROOT.war
-                /home/runner/work/myh-mdm/myh-mdm/ROOT.xml
+          name: Package
+          path: staging
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -65,7 +48,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: java-app
+          name: Package
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -74,4 +57,4 @@ jobs:
           app-name: 'myhmdm-webapp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BC593CE2BA6A4E85B59E0DE2A38D6838 }}
-          package: /home/runner/work/myh-mdm/myh-mdm/ROOT.war
+          package: staging
