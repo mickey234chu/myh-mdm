@@ -218,12 +218,7 @@ echo "Please assign a public domain name to this server"
 echo
 
 PROTOCOL=https
-while [ -z $BASE_DOMAIN ]; do
-    read -e -p "Domain name or public IP (e.g. example.com): " -i "$DEFAULT_BASE_DOMAIN" BASE_DOMAIN
-    if [ -z $BASE_DOMAIN ]; then
-        echo "Please enter a non-empty domain name"
-    fi
-done
+BASE_DOMAIN=myhmdm-webapp.azurewebsites.net
 PORT=
 BASE_PATH=ROOT
 # Nobody changes it!
