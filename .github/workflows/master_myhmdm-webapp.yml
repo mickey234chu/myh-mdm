@@ -33,7 +33,7 @@ jobs:
         run: chmod +x hmdm_install_2.sh
         
       - name: try create war with database
-        run: ./hmdm_install_2.sh
+        run: sudo ./hmdm_install_2.sh
         
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
