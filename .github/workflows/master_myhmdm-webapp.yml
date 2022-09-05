@@ -31,6 +31,8 @@ jobs:
         
       - name: Cp jarandwar
         run: mkdir staging 
+      - name: locat
+        run: pwd
       - name: Cp jarandwar2
         run: |
           cp /home/runner/work/myh-mdm/myh-mdm/common/target/commom-0.1.0.jar staging
