@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+    
       - name: Set up Java version
         uses: actions/setup-java@v1
         with:
@@ -23,7 +23,12 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
-
+        
+      - name: Install tool
+        run: |
+          sudo apt-get update
+          sudo apt install -y aapt tomcat9 postgresql vim certbot unzip net-tools
+          
       - name: try upgraph sh
         run: chmod +x hmdm_install_2.sh
         
