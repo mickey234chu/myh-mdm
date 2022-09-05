@@ -55,11 +55,6 @@ fi
 CURRENTUSER=$(whoami)
 if [[ "$EUID" -ne 0 ]]; then
     echo "It is recommended to run the installer script as root."
-    read -p "Proceed as $CURRENTUSER (Y/n)? " -n 1 -r
-    echo
-    if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
 fi
 
 # Check if there's an install folder
