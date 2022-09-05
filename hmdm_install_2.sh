@@ -310,7 +310,7 @@ chmod 644 $TOMCAT_HOME/webapps/$TOMCAT_DEPLOY_PATH.war
 
 # Waiting until the end of deployment
 SUCCESSFUL_DEPLOY=0
-for i in {1..120}; do
+for i in {1..240}; do
     if [ -f $INSTALL_FLAG_FILE ]; then
         if [[ $(< $INSTALL_FLAG_FILE) == "OK" ]]; then
             SUCCESSFUL_DEPLOY=1
