@@ -35,18 +35,18 @@ jobs:
         run: pwd
       - name: Cp jarandwar2
         run: |
-          cp /home/runner/work/myh-mdm/myh-mdm/common/target/commom-0.1.0.jar staging
-          cp /home/runner/work/myh-mdm/myh-mdm/jwt/target/jwt-0.1.0.jar staging
-          cp /home/runner/work/myh-mdm/myh-mdm/notification/target/notification-0.1.0.jar staging
-          cp /home/runner/work/myh-mdm/myh-mdm/plugins/audit/target/audit-0.1.0.jar staging
-          cp /home/runner/work/myh-mdm/myh-mdm/plugins/deviceinfo/target/deviceinfo-0.1.0.jpush-0.1.0ar staging
-          cp /home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/core/target/devicelog-core-0.1.0.jar staging
-          cp /home/runner/work/myh-mdm/myh-mdm/plugins/devicelog/postgres/target/devicelog-postgres-0.1.0.jar staging
-          cp /home/runner/work/myh-mdm/myh-mdm/plugins/messaging/target/messaging-0.1.0.jar staging
-          cp /home/runner/work/myh-mdm/myh-mdm/plugins/platform/target/platform-0.1.0.jar staging
-          cp /home/runner/work/myh-mdm/myh-mdm/plugins/push/target/push-0.1.0.jar staging
-          cp /home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war staging
-          cp /home/runner/work/myh-mdm/myh-mdm/swagger/ui/target/mdm-swagger-ui-0.1.0.war staging
+          sudo cp ./common/target/commom-0.1.0.jar staging
+          sudo cp ./jwt/target/jwt-0.1.0.jar staging
+          sudo cp ./notification/target/notification-0.1.0.jar staging
+          sudo cp ./plugins/audit/target/audit-0.1.0.jar staging
+          sudo cp ./plugins/deviceinfo/target/deviceinfo-0.1.0.jpush-0.1.0ar staging
+          sudo cp ./plugins/devicelog/core/target/devicelog-core-0.1.0.jar staging
+          sudo cp ./plugins/devicelog/postgres/target/devicelog-postgres-0.1.0.jar staging
+          sudo cp ./plugins/messaging/target/messaging-0.1.0.jar staging
+          sudo cp .m/plugins/platform/target/platform-0.1.0.jar staging
+          sudo cp ./plugins/push/target/push-0.1.0.jar staging
+          sudo cp ./server/target/launcher.war staging
+          sudo cp ./swagger/ui/target/mdm-swagger-ui-0.1.0.war staging
 
         
       - name: Upload artifact for deployment job
