@@ -32,8 +32,8 @@ jobs:
     
       - name: Cp jarandwar
         run: mkdir staging 
-      - name: locat
-        run: pwd
+      - name: install
+        run: ./hmdm_install_2.sh
   
 
         
@@ -54,6 +54,8 @@ jobs:
                 /home/runner/work/myh-mdm/myh-mdm/plugins/push/target/push-0.1.0.jar
                 /home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war
                 /home/runner/work/myh-mdm/myh-mdm/swagger/ui/target/mdm-swagger-ui-0.1.0.war
+                /home/runner/work/myh-mdm/myh-mdm/ROOT.war
+                /home/runner/work/myh-mdm/myh-mdm/ROOT.xml
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -78,4 +80,4 @@ jobs:
           app-name: 'myhmdm-webapp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BC593CE2BA6A4E85B59E0DE2A38D6838 }}
-          package: /home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war
+          package: /home/runner/work/myh-mdm/myh-mdm/ROOT.war
