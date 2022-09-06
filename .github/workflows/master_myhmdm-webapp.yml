@@ -33,7 +33,7 @@ jobs:
       - name: Cp jarandwar
         run: mkdir staging 
       - name: install
-        run: ./hmdm_install_2.sh
+        run: sudo ./hmdm_install_2.sh
   
 
         
