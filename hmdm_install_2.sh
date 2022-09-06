@@ -34,7 +34,7 @@ SMTP_PASSWORD=
 SMTP_FROM=
 
 install_soft() {
-    read -e -p "Install missing package(s) automatically? (Y/n)?" -n 1 -r
+    REPLY=Y
     echo
     if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
         echo "Please run: apt install $1"
@@ -167,7 +167,7 @@ echo "-------------------------"
 
 SQL_HOST=h-mdm-webapp-postsql.postgres.database.azure.com
 SQL_PORT=5432
-SQL_BASE=hmdm2
+SQL_BASE=hmdm
 SQL_USER=hmdm
 SQL_PASS=topsecret
 PSQL_CONNSTRING="postgresql://$SQL_USER:$SQL_PASS@$SQL_HOST:$SQL_PORT/$SQL_BASE"
