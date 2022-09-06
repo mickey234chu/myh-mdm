@@ -385,39 +385,10 @@ if [[ "$REPLY" =~ ^[Yy]$ ]]; then
     fi
 fi
 
-# Redirect the ports
-IPTABLES_HTTPS_SET=$(/sbin/iptables -t nat --list | grep 8443)
-if [ -z "$IPTABLES_HTTPS_SET" ]; then
-    REPLY=Y
-    if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-        cp iptables-tomcat.sh $SCRIPT_LOCATION/iptables-tomcat.sh
-	chmod +x $SCRIPT_LOCATION/iptables-tomcat.sh
-	$SCRIPT_LOCATION/iptables-tomcat.sh
 
-        IPTABLES_RENEWAL=$(crontab -l | grep iptables-tomcat.sh)
-	if [ -z "$IPTABLES_RENEWAL" ]; then
-            crontab -l > /tmp/current-crontab
-	    echo "@reboot $SCRIPT_LOCATION/iptables-tomcat.sh" >> /tmp/current-crontab
-            crontab /tmp/current-crontab
-	    rm /tmp/current-crontab
-	fi
-    fi
-fi
 
-# Download required files
-read -e -p "Move required APKs from h-mdm.com to your server [Y/n]?: " -i "Y" REPLY
-if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-    FILES=$(echo "SELECT url FROM applicationversions WHERE url IS NOT NULL" | psql $PSQL_CONNSTRING 2>/dev/null | tail -n +3 | head -n -2)
-    CURRENT_DIR=$(pwd)
-    cd $LOCATION/files
-    for FILE in $FILES; do
-        echo "Downloading $FILE..."
-	wget $FILE
-    done
-    chown $TOMCAT_USER:$TOMCAT_USER *
-    echo "UPDATE applicationversions SET url=REPLACE(url, 'https://h-mdm.com', '$PROTOCOL://$BASE_HOST$BASE_PATH') WHERE url IS NOT NULL" | psql $PSQL_CONNSTRING >/dev/null 2>&1
-    cd $CURRENT_DIR
-fi
+
+
 
 echo
 echo "======================================"
