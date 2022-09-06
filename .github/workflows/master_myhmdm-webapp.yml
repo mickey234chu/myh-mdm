@@ -55,7 +55,7 @@ jobs:
                 /home/runner/work/myh-mdm/myh-mdm/server/target/launcher.war
                 /home/runner/work/myh-mdm/myh-mdm/swagger/ui/target/mdm-swagger-ui-0.1.0.war
                 /home/runner/work/myh-mdm/myh-mdm/ROOT.war
-                /home/runner/work/myh-mdm/myh-mdm/ROOT.xml
+              
   deploy:
     runs-on: ubuntu-latest
     needs: build
