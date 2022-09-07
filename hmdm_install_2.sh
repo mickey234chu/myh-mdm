@@ -67,7 +67,7 @@ fi
 # Check if there's aapt tool installed
 if ! which aapt > /dev/null; then
     echo "Android App Packaging Tool is not installed!"
-    install_soft aapt
+    #install_soft aapt
 fi
 
 # Check PostgreSQL installation
