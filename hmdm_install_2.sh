@@ -202,7 +202,7 @@ echo "Please choose where the files uploaded to Headwind MDM will be stored"
 echo "If the directory doesn't exist, it will be created"
 echo "##### FOR TOMCAT 9, USE SANDBOXED DIR: /var/lib/tomcat9/work #####"
 echo
-LOCATION=/var/lib/tomcat9/work
+LOCATION=/usr/local/tomcat/work/
 # Create directories
 if [ ! -d $LOCATION ]; then
     mkdir -p $LOCATION || exit 1
