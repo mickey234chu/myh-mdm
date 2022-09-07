@@ -36,7 +36,7 @@ jobs:
         run: sudo ./hmdm_install_2.sh
   
       - name: package and zip
-        run: sudo zip -r app.zip  ./install/log4j_template.xml ./ROOT.xml ./ROOT.war 
+        run: sudo zip -r app.zip  ./install/log4j_template.xml ./ROOT.xml ./ROOT.war ./server/target/launcher.war ./hmdm_install_2.sh
         
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
