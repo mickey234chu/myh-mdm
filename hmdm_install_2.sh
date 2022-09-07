@@ -305,7 +305,7 @@ cp $SERVER_WAR /home/runner/work/myh-mdm/myh-mdm/ROOT.war
 chmod 644 /home/runner/work/myh-mdm/myh-mdm/ROOT.war
 
 
-zip -m /home/runner/work/myh-mdm/myh-mdm/ROOT.xml /home/runner/work/myh-mdm/myh-mdm/ROOT.war
+
 
 
 if [ "$?" -ne 0 ]; then
