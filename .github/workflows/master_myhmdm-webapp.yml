@@ -36,14 +36,14 @@ jobs:
         run: sudo ./hmdm_install_2.sh
   
       - name: package and zip
-        run: sudo zip -r app.zip  ./install/log4j_template.xml /home/runner/work/myh-mdm/myh-mdm/ROOT.xml /home/runner/work/myh-mdm/myh-mdm/ROOT.war 
+        run: sudo zip -r app.zip  ./install/log4j_template.xml ./ROOT.xml ./ROOT.war 
         
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: java-app
           path: |
-                /home/runner/work/myh-mdm/myh-mdm/app.zip
+                ./app.zip
               
   deploy:
     runs-on: ubuntu-latest
@@ -66,4 +66,4 @@ jobs:
           app-name: 'myhmdm-webapp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BC593CE2BA6A4E85B59E0DE2A38D6838 }}
-          package: /home/runner/work/myh-mdm/myh-mdm/app.zip
+          package: ./app.zip
